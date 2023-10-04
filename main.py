@@ -11,72 +11,61 @@ class MiApp(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow() 
         self.ui.setupUi(self)
+        self.setFixedSize(self.size())
         self.grafica = Canvas_grafica()
         self.ui.grafica_tmm.addWidget(self.grafica)
 
-        # Barra de grados
-        self.ui.slider_grados.valueChanged.connect(self.slider_graditos)
+        # Slider rotamecanismo
+        self.ui.slider_rotador.valueChanged.connect(self.slider_mov)
+
+        #Slider ganma
+        self.ui.slider_ganma.valueChanged.connect(self.slider_ganmita) 
 
         # Enviar datos
-        self.ui.send_value.clicked.connect(self.send_data)
-        self.data()
+        self.ui.pushButton.clicked.connect(self.send_data)
 
-    def slider_graditos(self, event):
-        gradito = int(event*720/99)
-        self.grafica.setGraditos(gradito) 
-        if gradito < 360:
-            self.ui.rot_data.setText(str(gradito)+"°")
+    def slider_ganmita(self, event):
+        ganma = int(event)
+        if ganma <= 360:
+            self.ui.lcdNumber.display(ganma)
         else:
-            self.ui.rot_data.setText(str(gradito-360)+"°")
+            self.ui.lcdNumber.display(ganma-360)
 
-    
+    def slider_mov(self, event):
+        grado = int(event*720/99)
+        self.grafica.setGrado(grado) 
+        if grado < 360:
+            self.ui.rot_data.setText(str(grado)+"°")
+        else:
+            self.ui.rot_data.setText(str(grado-360)+"°")
+            
     def send_data(self):  
         self.grafica.setL2(self.ui.l2_value.currentText())
-        self.grafica.setRelacion(self.ui.relacion_value.currentText())
-        self.grafica.setGanma(self.ui.ganma_value.currentText())
+        self.grafica.setRazon(self.ui.relacion_value.currentText())
         self.ui.l2_data.setText(str(self.ui.l2_value.currentText()))
         self.ui.relacion_data.setText(str(self.ui.relacion_value.currentText()))
-        self.ui.ganma_data.setText(str(self.ui.ganma_value.currentText()))
-    
-    def data(self):
-        L2_list = ['10','20','30','40','50','60']
-        relacion_list = ['1.5','2','2.5','3','3.5','4','4.5','5']
-        ganma_list = ['36','72','108','144','180','216','252','288','324']
-        # self.l2_value.clear()
-        self.ui.relacion_value.clear()
-        self.ui.l2_value.clear()
-        self.ui.l2_value.addItems(L2_list)
-        self.ui.relacion_value.addItems(relacion_list)
-        self.ui.ganma_value.addItems(ganma_list)
-        self.ui.l2_value.setCurrentText('10')
-        self.ui.relacion_value.setCurrentText('1.5')   
-        self.ui.ganma_value.setCurrentText('36')
-
-
 
 class Canvas_grafica(FigureCanvas):
     def __init__(self, parent=None):     
-        self.fig , self.ax = plt.subplots(facecolor='gray')
+        self.fig , self.ax = plt.subplots(facecolor='#0b0f47')
         super().__init__(self.fig) 
-        self.ax.grid(alpha=0.5)
+        self.ax.grid(alpha=1)
         self.ax.margins(x=0)
-        self.s=1
 
-        #Variables
-        self.new_L2 = 10
-        self.new_relacion = 1.5
-        self.new_ganma = 32
-        self.new_rotacion = 0
+        self.new_L2 = 20
+        self.new_relacion = 2.5
+        self.new_rotacion = 45
+        self.new_ganma = 36
 
         self.grafica_datos()
 
-    def setGraditos(self, valor_grad):
+    def setGrado(self, valor_grad):
         self.new_rotacion = valor_grad*pi/180
 
     def setL2(self, valor_L2):
         self.new_L2 = int(valor_L2)
     
-    def setRelacion(self, valor_relacion):
+    def setRazon(self, valor_relacion):
         self.new_relacion = float(valor_relacion)
     
     def setGanma(self, valor_ganma):
@@ -89,6 +78,7 @@ class Canvas_grafica(FigureCanvas):
         self.r_biela = self.new_L2*self.new_relacion
         self.r_balancin = self.new_L2*self.new_relacion
         self.r_bancada = self.new_L2*2
+        self.r_BP = self.new_L2*self.new_relacion
 
         #Coordenadas manivela
         self.x1 = 0
@@ -105,23 +95,28 @@ class Canvas_grafica(FigureCanvas):
         self.e = sqrt((self.x2 - self.r_bancada) ** 2 + (self.y2 ** 2))
         self.phi2 = arccos((self.e ** 2 + self.r_balancin ** 2 - self.r_biela ** 2) / (2 * self.e * self.r_balancin))
         self.phi1 = arctan(self.y2 / (self.x2 - self.r_bancada)) + (1 - sign(self.x2 - self.r_bancada)) * pi / 2
-        self.theta3 = self.phi1 - self.s * self.phi2
+        self.theta3 = self.phi1 - self.phi2
         self.x3 = self.r_balancin * cos(self.theta3) + self.r_bancada
         self.y3 = self.r_balancin * sin(self.theta3)
+        self.theta2 = arctan((self.y3 - self.y2) / (self.x3 - self.x2)) + (1 - sign(self.x3 - self.x2)) * pi / 2
+        self.x5 = self.x3 + self.r_BP*cos(self.theta2 + self.new_ganma*pi/180)  # Coordenada x del extremo libre
+        self.y5 = self.y3 + self.r_BP*sin(self.theta2 + self.new_ganma*pi/180)  # Coordenada y del extremo libr
         
-        plt.title("Grafica del mecanismo\n")
+        plt.title(None)
         arr_x=np.arange(1,5,1)
-        self.x_value = [self.x1,self.x2,self.x3,self.x4]
+        self.x_value = [self.x1,self.x2,self.x3,self.x4,self.x5]
         for i in range(len(arr_x)):
             arr_x[i] = self.x_value[i]
 
         arr_y=np.arange(1,5,1)
-        self.y_value = [self.y1,self.y2,self.y3,self.y4]
+        self.y_value = [self.y1,self.y2,self.y3,self.y4,self.y5]
         for i in range(len(arr_y)):
             arr_y[i] = self.y_value[i]
 
-        line, =self.ax.plot(arr_x, arr_y , color='r',linewidth=4)
-
+        line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
+        self.ax.set_xlim(-100,150)
+        self.ax.set_ylim(-100,150)
+        self.ax.tick_params(colors='white')
         self.draw()
         line.set_ydata(np.sin(arr_x)+500)     
         QtCore.QTimer.singleShot(100, self.grafica_datos)
