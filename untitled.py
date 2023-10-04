@@ -14,7 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1040, 676)
+        MainWindow.resize(1040, 673)
+        MainWindow.setToolTipDuration(-4)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -29,19 +30,39 @@ class Ui_MainWindow(object):
         self.frame.setObjectName("frame")
         self.line = QtWidgets.QFrame(self.frame)
         self.line.setEnabled(True)
-        self.line.setGeometry(QtCore.QRect(310, 0, 16, 681))
+        self.line.setGeometry(QtCore.QRect(330, 0, 16, 681))
         self.line.setAutoFillBackground(False)
         self.line.setStyleSheet("selection-color: rgb(255, 255, 255);")
         self.line.setLineWidth(2)
         self.line.setFrameShape(QtWidgets.QFrame.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
-        self.horizontalSlider_2 = QtWidgets.QSlider(self.frame)
-        self.horizontalSlider_2.setGeometry(QtCore.QRect(80, 250, 160, 22))
-        self.horizontalSlider_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.horizontalSlider_2.setMaximum(360)
-        self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider_2.setObjectName("horizontalSlider_2")
+        self.slider_ganma = QtWidgets.QSlider(self.frame)
+        self.slider_ganma.setGeometry(QtCore.QRect(80, 230, 160, 50))
+        self.slider_ganma.setMinimumSize(QtCore.QSize(0, 50))
+        self.slider_ganma.setStyleSheet("QSlider::groove:horizontal{\n"
+"    border: 1px solid rgb(0,170,0);\n"
+"    height: 4px;\n"
+"    background: rgb(0,170,0);\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal{\n"
+"    background: rgb(0,170,0);\n"
+"    width:28px;\n"
+"    height: 28px;\n"
+"    left: 11px;\n"
+"    right: 11px;\n"
+"    margin: -12px;\n"
+"    border-radius: 14px;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal{\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
+"}")
+        self.slider_ganma.setMaximum(360)
+        self.slider_ganma.setOrientation(QtCore.Qt.Horizontal)
+        self.slider_ganma.setObjectName("slider_ganma")
         self.frame_2 = QtWidgets.QFrame(self.frame)
         self.frame_2.setGeometry(QtCore.QRect(400, 150, 561, 451))
         self.frame_2.setStyleSheet("QFrame{\n"
@@ -68,12 +89,9 @@ class Ui_MainWindow(object):
         self.verticalLayoutWidget = QtWidgets.QWidget(self.frame_2)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(30, 60, 501, 371))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.lcdNumber_2 = QtWidgets.QLCDNumber(self.frame)
-        self.lcdNumber_2.setGeometry(QtCore.QRect(250, 250, 64, 23))
-        self.lcdNumber_2.setObjectName("lcdNumber_2")
+        self.grafica_tmm = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.grafica_tmm.setContentsMargins(0, 0, 0, 0)
+        self.grafica_tmm.setObjectName("grafica_tmm")
         self.label_2 = QtWidgets.QLabel(self.frame)
         self.label_2.setGeometry(QtCore.QRect(480, 70, 401, 16))
         font = QtGui.QFont()
@@ -86,17 +104,21 @@ class Ui_MainWindow(object):
         self.label_2.setTextFormat(QtCore.Qt.PlainText)
         self.label_2.setObjectName("label_2")
         self.label_4 = QtWidgets.QLabel(self.frame)
-        self.label_4.setGeometry(QtCore.QRect(60, 60, 221, 16))
+        self.label_4.setGeometry(QtCore.QRect(50, 60, 251, 16))
         self.label_4.setStyleSheet("color: rgb(255, 255, 255);\n"
 "color: rgb(0, 170, 0);\n"
 "font: 12pt \"MS Shell Dlg 2\";")
         self.label_4.setObjectName("label_4")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit.setGeometry(QtCore.QRect(110, 120, 113, 22))
-        self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit_2.setGeometry(QtCore.QRect(110, 180, 113, 22))
-        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.entrada_longitud = QtWidgets.QLineEdit(self.frame)
+        self.entrada_longitud.setGeometry(QtCore.QRect(110, 120, 113, 22))
+        self.entrada_longitud.setStyleSheet("color: rgb(255, 255, 255);\n"
+"font: 10pt \"MS Shell Dlg 2\";")
+        self.entrada_longitud.setObjectName("entrada_longitud")
+        self.entrada_relacion = QtWidgets.QLineEdit(self.frame)
+        self.entrada_relacion.setGeometry(QtCore.QRect(110, 180, 113, 22))
+        self.entrada_relacion.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 255, 255);")
+        self.entrada_relacion.setObjectName("entrada_relacion")
         self.label_5 = QtWidgets.QLabel(self.frame)
         self.label_5.setGeometry(QtCore.QRect(70, 120, 31, 16))
         self.label_5.setStyleSheet("font: 75 12pt \"MS Shell Dlg 2\";\n"
@@ -108,31 +130,81 @@ class Ui_MainWindow(object):
 "color: rgb(255, 255, 255);")
         self.label_6.setObjectName("label_6")
         self.label_8 = QtWidgets.QLabel(self.frame)
-        self.label_8.setGeometry(QtCore.QRect(10, 240, 61, 31))
+        self.label_8.setGeometry(QtCore.QRect(10, 240, 61, 21))
         self.label_8.setStyleSheet("font: 75 11pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 255, 255);")
         self.label_8.setObjectName("label_8")
         self.pushButton = QtWidgets.QPushButton(self.frame)
-        self.pushButton.setGeometry(QtCore.QRect(110, 300, 93, 28))
-        self.pushButton.setStyleSheet("background-color: rgb(170, 0, 0);\n"
+        self.pushButton.setGeometry(QtCore.QRect(110, 600, 121, 41))
+        self.pushButton.setStyleSheet("background-color: rgb(0, 170, 0);\n"
+"font: 10pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 255, 255);\n"
 "border-radius: 5px")
         self.pushButton.setObjectName("pushButton")
         self.label_9 = QtWidgets.QLabel(self.frame)
-        self.label_9.setGeometry(QtCore.QRect(380, 630, 561, 20))
+        self.label_9.setGeometry(QtCore.QRect(700, 640, 331, 20))
         self.label_9.setStyleSheet("font: 75 10pt \"MS Shell Dlg 2\";\n"
 "color: rgb(255, 255, 255);")
         self.label_9.setObjectName("label_9")
+        self.label_3 = QtWidgets.QLabel(self.frame)
+        self.label_3.setGeometry(QtCore.QRect(350, 30, 101, 101))
+        self.label_3.setText("")
+        self.label_3.setPixmap(QtGui.QPixmap(".\\Pasted-2023921-192d303.png"))
+        self.label_3.setScaledContents(True)
+        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_3.setObjectName("label_3")
+        self.label_7 = QtWidgets.QLabel(self.frame)
+        self.label_7.setGeometry(QtCore.QRect(880, 30, 131, 101))
+        self.label_7.setText("")
+        self.label_7.setPixmap(QtGui.QPixmap(".\\unt_logo.png"))
+        self.label_7.setScaledContents(True)
+        self.label_7.setObjectName("label_7")
         self.label_10 = QtWidgets.QLabel(self.frame)
-        self.label_10.setGeometry(QtCore.QRect(880, 20, 141, 111))
-        self.label_10.setStyleSheet("image: url(:/log/unt_logo.png);")
-        self.label_10.setText("")
+        self.label_10.setGeometry(QtCore.QRect(360, 620, 71, 21))
+        self.label_10.setStyleSheet("font: 75 11pt \"MS Shell Dlg 2\";\n"
+"color: rgb(255, 255, 255);")
         self.label_10.setObjectName("label_10")
+        self.slider_rotador = QtWidgets.QSlider(self.frame)
+        self.slider_rotador.setGeometry(QtCore.QRect(440, 610, 160, 50))
+        self.slider_rotador.setMinimumSize(QtCore.QSize(0, 50))
+        self.slider_rotador.setStyleSheet("QSlider::groove:horizontal{\n"
+"    border: 1px solid rgb(0,170,0);\n"
+"    height: 4px;\n"
+"    background: rgb(0,170,0);\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal{\n"
+"    background: rgb(0,170,0);\n"
+"    width:28px;\n"
+"    height: 28px;\n"
+"    left: 11px;\n"
+"    right: 11px;\n"
+"    margin: -12px;\n"
+"    border-radius: 14px;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal{\n"
+"    background-color: white;\n"
+"    border: 1px solid white;\n"
+"}")
+        self.slider_rotador.setMaximum(360)
+        self.slider_rotador.setOrientation(QtCore.Qt.Horizontal)
+        self.slider_rotador.setObjectName("slider_rotador")
+        self.lcdNumber = QtWidgets.QLCDNumber(self.frame)
+        self.lcdNumber.setGeometry(QtCore.QRect(250, 240, 64, 23))
+        self.lcdNumber.setObjectName("lcdNumber")
         self.label_11 = QtWidgets.QLabel(self.frame)
-        self.label_11.setGeometry(QtCore.QRect(350, 30, 111, 91))
-        self.label_11.setStyleSheet("image: url(:/log/Pasted-2023921-192d303.png);")
-        self.label_11.setText("")
+        self.label_11.setGeometry(QtCore.QRect(610, 620, 16, 31))
+        self.label_11.setStyleSheet("color: rgb(255, 255, 255);\n"
+"font: 12pt \"MS Shell Dlg 2\";\n"
+"")
         self.label_11.setObjectName("label_11")
+        self.label_12 = QtWidgets.QLabel(self.frame)
+        self.label_12.setGeometry(QtCore.QRect(10, 290, 321, 281))
+        self.label_12.setText("")
+        self.label_12.setPixmap(QtGui.QPixmap(".\\WhatsApp Image 2023-10-03 at 11.22.05 PM.jpeg"))
+        self.label_12.setScaledContents(True)
+        self.label_12.setObjectName("label_12")
         self.horizontalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -144,13 +216,14 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "Curva de Acoplador"))
         self.label_2.setText(_translate("MainWindow", "UNIVERSIDAD NACIONAL DE TRUJILLO"))
-        self.label_4.setText(_translate("MainWindow", "Parametros de entrada"))
+        self.label_4.setText(_translate("MainWindow", "PARAMETROS DE ENTRADA"))
         self.label_5.setText(_translate("MainWindow", "L2:"))
         self.label_6.setText(_translate("MainWindow", "r:"))
         self.label_8.setText(_translate("MainWindow", "ganma"))
         self.pushButton.setText(_translate("MainWindow", "SIMULAR"))
-        self.label_9.setText(_translate("MainWindow", "Diseñado por Brayan Stalin Vera Noriega y William Jesús Salazar Llamoga"))
-import images_rc
+        self.label_9.setText(_translate("MainWindow", "Diseñado por Brayan Vera y William Salazar"))
+        self.label_10.setText(_translate("MainWindow", "alfa(rot)"))
+        self.label_11.setText(_translate("MainWindow", "0"))
 
 
 if __name__ == "__main__":
