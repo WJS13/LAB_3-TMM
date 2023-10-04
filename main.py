@@ -1,27 +1,8 @@
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-import images_rc
+import sys
+import numpy as np
+from untitled import*
+from PyQt5 import QtCore
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
+from numpy import pi, sin, cos, sqrt, absolute, arccos, arctan, sign
 
-class MiAplicacion(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-
-        # Conecta las señales y ranuras aquí, si es necesario
-        self.ui.pushButton.clicked.connect(self.simular)
-
-    def simular(self):
-        # Implementa la lógica de tu aplicación aquí
-        # Por ejemplo, puedes obtener valores de los campos de texto:
-        l2 = self.ui.lineEdit.text()
-        r = self.ui.lineEdit_2.text()
-        # Realiza el cálculo o la acción que necesites
-        # y actualiza la interfaz si es necesario
-
-if __name__ == "__main__":
-    app = QApplication([])
-    window = MiAplicacion()
-    window.show()
-    sys.exit(app.exec_())
