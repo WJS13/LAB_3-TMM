@@ -7,7 +7,6 @@ from PyQt5 import QtCore, QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import QTimer
 
-
 class MiApp(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -136,7 +135,7 @@ class Canvas_grafica(FigureCanvas):
         self.ax.tick_params(colors='white')
         self.draw()
         line.set_ydata(np.sin(arr_x)+500)
-        QtCore.QTimer.singleShot(100, self.grafica_datos)
+        QtCore.QTimer.singleShot(0, self.grafica_datos)
 
 
 if __name__ == "__main__":
