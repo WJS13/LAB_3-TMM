@@ -2,9 +2,12 @@ import sys
 import numpy as np
 from untitled import*
 from PyQt5 import QtCore
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QAbstractSlider
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5.QtCore import QTimer
 import matplotlib.pyplot as plt
-from numpy import pi, sin, cos, sqrt, absolute, arccos, arctan, sign
+from numpy import pi, sin, cos, sqrt, arccos, arctan, sign
 
 class MiApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -26,24 +29,29 @@ class MiApp(QtWidgets.QMainWindow):
 
     def slider_ganmita(self, event):
         ganma = int(event)
-        if ganma <= 360:
-            self.ui.lcdNumber.display(ganma)
-        else:
-            self.ui.lcdNumber.display(ganma-360)
-
+        self.ui.lcdNumber.display(ganma)
+        
     def slider_mov(self, event):
-        grado = int(event*720/99)
+        grado = int(event*360/99)
         self.grafica.setGrado(grado) 
         if grado < 360:
             self.ui.rot_data.setText(str(grado)+"°")
         else:
             self.ui.rot_data.setText(str(grado-360)+"°")
-            
+
     def send_data(self):  
-        self.grafica.setL2(self.ui.l2_value.currentText())
-        self.grafica.setRazon(self.ui.relacion_value.currentText())
-        self.ui.l2_data.setText(str(self.ui.l2_value.currentText()))
-        self.ui.relacion_data.setText(str(self.ui.relacion_value.currentText()))
+        self.grafica.setL2(self.ui.entrada_longitud.text())
+        self.grafica.setRazon(self.ui.entrada_relacion.text())
+        self.grafica.setGanma(self.ui.lcdNumber.value())
+        self.ui.entrada_longitud.setText(str(self.ui.entrada_longitud.text()))
+        self.ui.entrada_relacion.setText(str(self.ui.entrada_relacion.text()))
+        self.ui.lcdNumber.value()
+        QTimer.singleShot(30000, self.clear_inputs)
+    
+    def clear_inputs(self):
+        self.ui.entrada_longitud.clear()
+        self.ui.entrada_relacion.clear()
+        self.ui.lcdNumber.display(0)
 
 class Canvas_grafica(FigureCanvas):
     def __init__(self, parent=None):     
@@ -54,16 +62,16 @@ class Canvas_grafica(FigureCanvas):
 
         self.new_L2 = 25
         self.new_relacion = 1.5
-        self.new_rotacion = 30
-        self.new_ganma = 108
+        self.new_rotacion = 90
+        self.new_ganma = 10
         
         self.acoplador_x = []  # Add this line to initialize the acoplador_x attribute
         self.acoplador_y = []  # Add this line to initialize the acoplador_y attribute
 
         self.grafica_datos()
 
-    def setGrado(self, valor_grad):
-        self.new_rotacion = valor_grad*pi/180
+    def setGrado(self, valor_grado):
+        self.new_rotacion = valor_grado*pi/180
 
     def setL2(self, valor_L2):
         self.new_L2 = int(valor_L2)
@@ -116,8 +124,8 @@ class Canvas_grafica(FigureCanvas):
         for i in range(len(arr_y)):
             arr_y[i] = self.y_value[i]
 
-        line_x = [self.x3, self.x5,self.x2]
-        line_y = [self.y3, self.y5,self.y2]
+        line_x = [self.x3, self.x5, self.x2]
+        line_y = [self.y3, self.y5, self.y2]
 
         self.acoplador_x.append(self.x5)
         self.acoplador_y.append(self.y5)
@@ -125,12 +133,14 @@ class Canvas_grafica(FigureCanvas):
         self.ax.scatter(self.x5, self.y5, color='b', s=50)
         line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
         self.ax.plot(line_x, line_y, color='r', linewidth=3)
-        self.ax.plot(self.acoplador_x, self.acoplador_y, color='r', linewidth=1)
+        self.ax.plot(self.acoplador_x, self.acoplador_y,'--' ,color='m', linewidth=1)
         self.ax.set_xlim(-100,150)
         self.ax.set_ylim(-100,150)
         self.ax.tick_params(colors='white')
         self.draw()
-        line.set_ydata(np.sin(arr_x)+500)     
+        self.acoplador_x = []
+        self.acoplador_y = []
+        line.set_ydata(np.sin(arr_x)+500)
         QtCore.QTimer.singleShot(100, self.grafica_datos)
 
 
