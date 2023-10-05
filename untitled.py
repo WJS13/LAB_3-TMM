@@ -194,9 +194,9 @@ class Ui_MainWindow(object):
         self.lcdNumber.setGeometry(QtCore.QRect(250, 240, 64, 23))
         self.lcdNumber.setObjectName("lcdNumber")
         self.label_11 = QtWidgets.QLabel(self.frame)
-        self.label_11.setGeometry(QtCore.QRect(610, 620, 16, 31))
+        self.label_11.setGeometry(QtCore.QRect(610, 620, 35, 30))
         self.label_11.setStyleSheet("color: rgb(255, 255, 255);\n"
-"font: 12pt \"MS Shell Dlg 2\";\n"
+"font: 10pt \"MS Shell Dlg 2\";\n"
 "")
         self.label_11.setObjectName("label_11")
         self.label_12 = QtWidgets.QLabel(self.frame)
@@ -223,7 +223,7 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "SIMULAR"))
         self.label_9.setText(_translate("MainWindow", "Diseñado por Brayan Vera y William Salazar"))
         self.label_10.setText(_translate("MainWindow", "alfa(rot)"))
-        self.label_11.setText(_translate("MainWindow", "0"))
+        self.label_11.setText(_translate("MainWindow", "0°"))
 
 
 if __name__ == "__main__":

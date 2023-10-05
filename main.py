@@ -32,12 +32,9 @@ class MiApp(QtWidgets.QMainWindow):
         self.ui.lcdNumber.display(ganma)
         
     def slider_mov(self, event):
-        grado = int(event*360/99)
+        grado = int(event)
         self.grafica.setGrado(grado) 
-        if grado < 360:
-            self.ui.rot_data.setText(str(grado)+"°")
-        else:
-            self.ui.rot_data.setText(str(grado-360)+"°")
+        self.ui.label_11.setText(str(grado)+"°")
 
     def send_data(self):  
         self.grafica.setL2(self.ui.entrada_longitud.text())
@@ -138,8 +135,6 @@ class Canvas_grafica(FigureCanvas):
         self.ax.set_ylim(-100,150)
         self.ax.tick_params(colors='white')
         self.draw()
-        self.acoplador_x = []
-        self.acoplador_y = []
         line.set_ydata(np.sin(arr_x)+500)
         QtCore.QTimer.singleShot(100, self.grafica_datos)
 
