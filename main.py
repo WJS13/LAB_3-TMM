@@ -49,13 +49,16 @@ class Canvas_grafica(FigureCanvas):
     def __init__(self, parent=None):     
         self.fig , self.ax = plt.subplots(facecolor='#0b0f47')
         super().__init__(self.fig) 
-        self.ax.grid(alpha=1)
+        self.ax.grid(alpha=0.25)
         self.ax.margins(x=0)
 
         self.new_L2 = 20
         self.new_relacion = 2.5
         self.new_rotacion = 45
-        self.new_ganma = 36
+        self.new_ganma = 30
+        
+        self.acoplador_x = []  # Add this line to initialize the acoplador_x attribute
+        self.acoplador_y = []  # Add this line to initialize the acoplador_y attribute
 
         self.grafica_datos()
 
@@ -104,16 +107,25 @@ class Canvas_grafica(FigureCanvas):
         
         plt.title(None)
         arr_x=np.arange(1,5,1)
-        self.x_value = [self.x1,self.x2,self.x3,self.x4,self.x5]
+        self.x_value = [self.x1,self.x2,self.x3,self.x4]
         for i in range(len(arr_x)):
             arr_x[i] = self.x_value[i]
 
         arr_y=np.arange(1,5,1)
-        self.y_value = [self.y1,self.y2,self.y3,self.y4,self.y5]
+        self.y_value = [self.y1,self.y2,self.y3,self.y4]
         for i in range(len(arr_y)):
             arr_y[i] = self.y_value[i]
 
+        line_x = [self.x3, self.x5]
+        line_y = [self.y3, self.y5]
+
+        self.acoplador_x.append(self.x5)
+        self.acoplador_y.append(self.y5)
+
         line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
+        self.ax.plot(line_x, line_y, color='r', linewidth=2)
+        self.ax.scatter(self.x5, self.y5, color='b', s=50)
+        self.ax.plot(self.acoplador_x, self.acoplador_y, color='r', linewidth=1)
         self.ax.set_xlim(-100,150)
         self.ax.set_ylim(-100,150)
         self.ax.tick_params(colors='white')
