@@ -52,10 +52,10 @@ class Canvas_grafica(FigureCanvas):
         self.ax.grid(alpha=0.25)
         self.ax.margins(x=0)
 
-        self.new_L2 = 20
-        self.new_relacion = 2.5
-        self.new_rotacion = 45
-        self.new_ganma = 30
+        self.new_L2 = 25
+        self.new_relacion = 1.5
+        self.new_rotacion = 30
+        self.new_ganma = 108
         
         self.acoplador_x = []  # Add this line to initialize the acoplador_x attribute
         self.acoplador_y = []  # Add this line to initialize the acoplador_y attribute
@@ -102,8 +102,8 @@ class Canvas_grafica(FigureCanvas):
         self.x3 = self.r_balancin * cos(self.theta3) + self.r_bancada
         self.y3 = self.r_balancin * sin(self.theta3)
         self.theta2 = arctan((self.y3 - self.y2) / (self.x3 - self.x2)) + (1 - sign(self.x3 - self.x2)) * pi / 2
-        self.x5 = self.x3 + self.r_BP*cos(self.theta2 + self.new_ganma*pi/180)  # Coordenada x del extremo libre
-        self.y5 = self.y3 + self.r_BP*sin(self.theta2 + self.new_ganma*pi/180)  # Coordenada y del extremo libr
+        self.x5 = self.x3 - self.r_BP*cos(self.theta2 - self.new_ganma*pi/180)  # Coordenada x del extremo libre
+        self.y5 = self.y3 - self.r_BP*sin(self.theta2 - self.new_ganma*pi/180)  # Coordenada y del extremo libr
         
         plt.title(None)
         arr_x=np.arange(1,5,1)
@@ -116,15 +116,15 @@ class Canvas_grafica(FigureCanvas):
         for i in range(len(arr_y)):
             arr_y[i] = self.y_value[i]
 
-        line_x = [self.x3, self.x5]
-        line_y = [self.y3, self.y5]
+        line_x = [self.x3, self.x5,self.x2]
+        line_y = [self.y3, self.y5,self.y2]
 
         self.acoplador_x.append(self.x5)
         self.acoplador_y.append(self.y5)
 
-        line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
-        self.ax.plot(line_x, line_y, color='r', linewidth=2)
         self.ax.scatter(self.x5, self.y5, color='b', s=50)
+        line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
+        self.ax.plot(line_x, line_y, color='r', linewidth=3)
         self.ax.plot(self.acoplador_x, self.acoplador_y, color='r', linewidth=1)
         self.ax.set_xlim(-100,150)
         self.ax.set_ylim(-100,150)
