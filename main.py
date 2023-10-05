@@ -1,13 +1,12 @@
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 from untitled import*
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtWidgets import QAbstractSlider
+from numpy import pi, sin, cos, sqrt, arccos, arctan, sign
+from PyQt5 import QtCore, QtWidgets
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import QTimer
-import matplotlib.pyplot as plt
-from numpy import pi, sin, cos, sqrt, arccos, arctan, sign
+
 
 class MiApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -35,6 +34,7 @@ class MiApp(QtWidgets.QMainWindow):
         grado = int(event)
         self.grafica.setGrado(grado) 
         self.ui.label_11.setText(str(grado)+"°")
+        self.grafica.grafica_datos()
 
     def send_data(self):  
         self.grafica.setL2(self.ui.entrada_longitud.text())
@@ -62,8 +62,8 @@ class Canvas_grafica(FigureCanvas):
         self.new_rotacion = 90
         self.new_ganma = 10
         
-        self.acoplador_x = []  # Add this line to initialize the acoplador_x attribute
-        self.acoplador_y = []  # Add this line to initialize the acoplador_y attribute
+        self.acoplador_x = []
+        self.acoplador_y = []
 
         self.grafica_datos()
 
@@ -107,8 +107,8 @@ class Canvas_grafica(FigureCanvas):
         self.x3 = self.r_balancin * cos(self.theta3) + self.r_bancada
         self.y3 = self.r_balancin * sin(self.theta3)
         self.theta2 = arctan((self.y3 - self.y2) / (self.x3 - self.x2)) + (1 - sign(self.x3 - self.x2)) * pi / 2
-        self.x5 = self.x3 - self.r_BP*cos(self.theta2 - self.new_ganma*pi/180)  # Coordenada x del extremo libre
-        self.y5 = self.y3 - self.r_BP*sin(self.theta2 - self.new_ganma*pi/180)  # Coordenada y del extremo libr
+        self.x5 = self.x3 - self.r_BP*cos(self.theta2 - self.new_ganma*pi/180)
+        self.y5 = self.y3 - self.r_BP*sin(self.theta2 - self.new_ganma*pi/180) 
         
         plt.title(None)
         arr_x=np.arange(1,5,1)
@@ -128,7 +128,7 @@ class Canvas_grafica(FigureCanvas):
         self.acoplador_y.append(self.y5)
 
         self.ax.scatter(self.x5, self.y5, color='b', s=50)
-        line, =self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
+        line, = self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
         self.ax.plot(line_x, line_y, color='r', linewidth=3)
         self.ax.plot(self.acoplador_x, self.acoplador_y,'--' ,color='m', linewidth=1)
         self.ax.set_xlim(-100,150)

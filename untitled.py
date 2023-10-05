@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         self.frame_2 = QtWidgets.QFrame(self.frame)
         self.frame_2.setGeometry(QtCore.QRect(400, 150, 561, 451))
         self.frame_2.setStyleSheet("QFrame{\n"
-"background-color: rgb(0,0,0,0);\n"
+"background-color: rgb(0,0,0);\n"
 "border-radius:10px;\n"
 "border: 2px solid #ffffff\n"
 "}")
