@@ -42,7 +42,7 @@ class MiApp(QtWidgets.QMainWindow):
         self.ui.entrada_longitud.setText(str(self.ui.entrada_longitud.text()))
         self.ui.entrada_relacion.setText(str(self.ui.entrada_relacion.text()))
         self.ui.lcdNumber.value()
-        QTimer.singleShot(30000, self.clear_inputs)
+        QTimer.singleShot(25000, self.clear_inputs)
     
     def clear_inputs(self):
         self.ui.entrada_longitud.clear()
@@ -61,8 +61,8 @@ class Canvas_grafica(FigureCanvas):
         self.new_rotacion = 90
         self.new_ganma = 10
         
-        self.acoplador_x = []
-        self.acoplador_y = []
+        self.trayectoria_x = []
+        self.trayectoria_y = []
 
         self.grafica_datos()
 
@@ -79,7 +79,7 @@ class Canvas_grafica(FigureCanvas):
         self.new_ganma = int(valor_ganma)
 
     def grafica_datos(self):
-
+        
         #Valores de los eslabones
         self.r_manivela = self.new_L2
         self.r_biela = self.new_L2*self.new_relacion
@@ -120,24 +120,25 @@ class Canvas_grafica(FigureCanvas):
         for i in range(len(arr_y)):
             arr_y[i] = self.y_value[i]
 
+        self.ax.clear()
+
         line_x = [self.x3, self.x5, self.x2]
         line_y = [self.y3, self.y5, self.y2]
 
-        self.acoplador_x.append(self.x5)
-        self.acoplador_y.append(self.y5)
+        self.trayectoria_x.append(self.x5)
+        self.trayectoria_y.append(self.y5)
 
         self.ax.scatter(self.x5, self.y5, color='b', s=50)
         line, = self.ax.plot(arr_x, arr_y , color='g',linewidth=3)
         self.ax.plot(line_x, line_y, color='r', linewidth=3)
-        self.ax.plot(self.acoplador_x, self.acoplador_y,'--' ,color='m', linewidth=1)
         self.ax.set_xlim(-100,150)
         self.ax.set_ylim(-100,150)
         self.ax.tick_params(colors='white')
+        self.ax.plot(self.trayectoria_x, self.trayectoria_y, "--" ,color='m', linewidth=1)
         self.draw()
         line.set_ydata(np.sin(arr_x)+500)
-        QtCore.QTimer.singleShot(0, self.grafica_datos)
-
-
+        QtCore.QTimer.singleShot(100, self.grafica_datos)
+        
 if __name__ == "__main__":
      app = QtWidgets.QApplication(sys.argv)
      mi_app = MiApp()
